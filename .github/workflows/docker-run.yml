@@ -1,0 +1,79 @@
+# Docker run pipeline — собирает образы, поднимает весь стек через docker compose
+# и проверяет, что backend и frontend реально запустились (smoke-тест на живом контейнере).
+#
+# Кладётся в репозиторий по пути: .github/workflows/docker-run.yml
+name: Docker Run
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  docker-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # --- Подготовка модели: обучаем и выбираем лучшую, чтобы образ ехал с артефактом ---
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Train & select best model
+        run: |
+          pip install -r backend/requirements.txt
+          python -m src.preprocess
+          for m in ridge random_forest gradient_boosting knn; do
+            python -m src.train --model "$m"
+          done
+          python -m src.select_best
+
+      # --- Сборка и запуск всего стека через docker compose ---
+      - name: Build images
+        run: docker compose build
+
+      - name: Start stack
+        run: docker compose up -d
+
+      # --- Ждём, пока backend станет healthy ---
+      - name: Wait for backend health
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fs http://localhost:8000/health | grep -q '"status":"ok"'; then
+              echo "backend is healthy"; exit 0
+            fi
+            echo "waiting for backend... ($i)"; sleep 5
+          done
+          echo "backend did not become healthy in time"; exit 1
+
+      # --- Ждём, пока frontend (Streamlit) поднимется ---
+      - name: Wait for frontend health
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fs http://localhost:8501/_stcore/health >/dev/null; then
+              echo "frontend is healthy"; exit 0
+            fi
+            echo "waiting for frontend... ($i)"; sleep 5
+          done
+          echo "frontend did not become healthy in time"; exit 1
+
+      # --- Smoke-тест: реальный запрос на предсказание к живому контейнеру ---
+      - name: Smoke test /predict
+        run: |
+          curl -fs -X POST http://localhost:8000/predict \
+            -H "Content-Type: application/json" \
+            -d '{"year":2014,"make":"Ford","model":"Fusion","trim":"SE","body":"Sedan","transmission":"automatic","state":"ca","condition":35.0,"odometer":42000.0,"color":"white","interior":"black"}' \
+            | tee /dev/stderr | grep -q '"predicted_price"'
+
+      # --- Диагностика и остановка ---
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v
