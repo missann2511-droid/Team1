@@ -1,0 +1,32 @@
+{
+  "target": "sellingprice",
+  "drop_columns": [
+    "vin",
+    "seller",
+    "saledate"
+  ],
+  "numeric_features": [
+    "year",
+    "condition",
+    "odometer"
+  ],
+  "categorical_features": [
+    "make",
+    "model",
+    "trim",
+    "body",
+    "transmission",
+    "state",
+    "color",
+    "interior"
+  ],
+  "feature_count": 273,
+  "train_rows": 40000,
+  "test_rows": 10000,
+  "test_size": 0.2,
+  "random_state": 42,
+  "sklearn_version": "1.6.1",
+  "data_path": "/home/jovyan/project_ivanov/data/car_prices_sample.csv",
+  "min_category_frequency": 10,
+  "max_categories_per_feature": 50
+}

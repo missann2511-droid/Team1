@@ -1,0 +1,1 @@
+{"rmse": 3137.565371031378, "mae": 2115.9647920871976, "r2": 0.864242414383396, "best_params": {"criterion": "squared_error", "max_depth": 20, "n_estimators": 100}}
