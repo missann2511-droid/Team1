@@ -1,1 +1,8 @@
-{"rmse": 3091.24887947474, "mae": 2012.2047773848317, "r2": 0.8682209163209319, "best_params": {"n_neighbors": 10, "weights": "distance", "metric": "cosine"}, "param_grid": "{'n_neighbors': [10, 30, 50], 'weights': ['uniform', 'distance'], 'metric': ['cosine']}"}
+{
+  "name": "K-Nearest Neighbors",
+  "rmse": 4956.916302966206,
+  "mae": 2526.2783706380783,
+  "r2": 0.7583085515786181,
+  "param_grid": "{'n_neighbors': [10, 30, 50], 'weights': ['uniform', 'distance'], 'metric': ['cosine']}",
+  "best_params": "n_neighbors=10, weights='distance', metric='cosine'"
+}

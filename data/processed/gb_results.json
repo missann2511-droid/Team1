@@ -1,1 +1,8 @@
-{"rmse": 3247.7750825261455, "mae": 2251.4841208266953, "r2": 0.8545377066011282, "best_params": {"learning_rate": 0.1, "max_depth": 5, "n_estimators": 100}}
+{
+  "name": "Gradient Boosting",
+  "rmse": 4708.41443311411,
+  "mae": 2643.9118085855657,
+  "r2": 0.7819342411389372,
+  "param_grid": "{'n_estimators': [100], 'max_depth': [3, 5], 'learning_rate': [0.05, 0.1]}",
+  "best_params": "max_depth=5, n_estimators=100, learning_rate=0.1"
+}

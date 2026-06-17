@@ -12,7 +12,7 @@
 
 This project is done by project team 1: Zhilenko Anna, Komarova Diana, Petrichenko Anna.This project builds an end-to-end machine learning pipeline to predict the selling price of used vehicles at auction, based on attributes such as make, model, year, odometer, condition, body type, and transmission.
 
-**Best model:** K-Nearest Neighbors (R² = 0.8682, RMSE ≈ $3,091)
+**Best model:** Random Forest (R² = 0.7996, RMSE ≈ $4,514)
 
 ---
 
@@ -49,9 +49,9 @@ pip install -r requirements.txt
 
 ## Results Summary
 
-| Model | RMSE ($) | MAE ($) | R² |
-|-------|---------|---------|-----|
-| KNN (n=10, distance, cosine) | 3,091 | 2,012 | 0.8682 |
-| Random Forest (100 trees, depth=20) | 3,138 | 2,116 | 0.8642 |
-| Gradient Boosting (lr=0.1, depth=5) | 3,248 | 2,251 | 0.8545 |
-| Ridge Regression (alpha=1.0) | 4,058 | 2,952 | 0.7729 |
+| Model                                | RMSE ($) | MAE ($) | R²     |
+| ------------------------------------ | -------- | ------- | ------ |
+| Random Forest (100 trees, depth=20)  | 4,514    | 2,492   | 0.7996 |
+| Gradient Boosting (lr=0.1, depth=5)  | 4,708    | 2,644   | 0.7819 |
+| KNN (n=10, distance, cosine)         | 4,957    | 2,526   | 0.7583 |
+| Ridge Regression (alpha=1.0)         | 5,566    | 3,148   | 0.6953 |
